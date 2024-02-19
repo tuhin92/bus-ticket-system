@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Display seat details for each selected seat
         selectedSeats.forEach(seatName => {
             const seatDetails = document.createElement('div');
-            seatDetails.className = 'flex justify-between font-inter text-sm seat-details';
+            seatDetails.className = 'flex justify-between font-inter text-lg seat-details';
             seatDetails.innerHTML = `<p>${seatName}</p><p>Economy</p><p>550</p>`;
             seatDetailsContainer.appendChild(seatDetails);
 
@@ -118,10 +118,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
         }
 
-        // Display discount amount on the same line
+        // Calculate Grand Total
+        const grandTotal = totalPrice - discount;
+
+        // Update the content of the grand total element
+        const grandTotalElement = document.getElementById('grandTotalValue');
+        if (grandTotalElement) {
+            grandTotalElement.textContent = grandTotal;
+        }
+
+        // Display discount amount
         const discountElement = document.createElement('div');
-        discountElement.className = 'font-inter font-bold text-lg'; 
-        discountElement.textContent = `Discount BDT ${discount.toFixed(2)}`;
+        discountElement.className = 'font-inter font-bold text-lg text-red-500'; 
+        discountElement.textContent = `Discount BDT  ${discount.toFixed(2)}`;
         seatDetailsContainer.appendChild(discountElement);
         
         // Hide the coupon input and apply button
