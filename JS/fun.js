@@ -137,7 +137,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const couponLabel = document.querySelector('.input.input-bordered');
         couponLabel.style.display = 'none';
     }
-
+ 
+    
     // Attach click event listeners to seat buttons
     seatButtons.forEach(function(seatButton) {
         seatButton.addEventListener('click', handleSeatSelection);
