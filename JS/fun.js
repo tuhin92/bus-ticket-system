@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedSeatCountElement = document.getElementById('selected-seat-count');
     const seatsLeftSpan = document.getElementById('seats-left');
     const seatDetailsContainer = document.getElementById('seatDetails');
+    const cartPriceElement = document.getElementById('cart-price'); // Assuming you have an element with id 'cart-price'
     let selectedSeatCount = 0;
     let seatsLeft = 40;
     const selectedSeats = [];
@@ -48,13 +49,32 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear previous seat details
         seatDetailsContainer.innerHTML = '';
 
+        let totalPrice = 0; // Initialize total price
+
         // Display seat details for each selected seat
         selectedSeats.forEach(seatName => {
             const seatDetails = document.createElement('div');
             seatDetails.className = 'flex justify-between font-inter text-sm seat-details'; // Increased font size to text-sm
             seatDetails.innerHTML = `<p>${seatName}</p><p>Economy</p><p>550</p>`;
             seatDetailsContainer.appendChild(seatDetails);
+
+            totalPrice += 550; // Add seat price to total price
         });
+
+        // Add horizontal line if there are selected seats
+        if (selectedSeats.length > 0) {
+            const hrElement = document.createElement('hr');
+            seatDetailsContainer.appendChild(hrElement);
+
+            // Add total price element before the cart price
+            const totalPriceElement = document.createElement('div');
+            totalPriceElement.className = 'flex justify-between font-inter font-bold text-lg'; // Increased font size to text-lg
+            totalPriceElement.innerHTML = `
+                <p>Total Price</p>
+                <p>BDT <span>${totalPrice}</span></p>
+            `;
+            seatDetailsContainer.appendChild(totalPriceElement); // Append total price element
+        }
 
         seatDetailsContainer.style.display = 'block';
     }
