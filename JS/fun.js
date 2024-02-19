@@ -123,6 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
         discountElement.className = 'font-inter font-bold text-lg'; 
         discountElement.textContent = `Discount BDT ${discount.toFixed(2)}`;
         seatDetailsContainer.appendChild(discountElement);
+        
+        // Hide the coupon input and apply button
+        const couponLabel = document.querySelector('.input.input-bordered');
+        couponLabel.style.display = 'none';
     }
 
     // Attach click event listeners to seat buttons
