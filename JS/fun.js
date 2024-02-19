@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartPriceElement = document.getElementById('cart-price');
     const couponInput = document.getElementById('couponInput');
     const applyButton = document.getElementById('applyButton');
+    const nextButton = document.getElementById('nextButton');
+    const passengerNameInput = document.getElementById('passengerName'); 
+    const phoneNumberInput = document.getElementById('phoneNumber'); 
+    const emailInput = document.getElementById('email');
     let selectedSeatCount = 0;
     let seatsLeft = 40;
     const selectedSeats = [];
@@ -38,7 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateSelectedSeatCount();
         updateSeatDetails();
-        updateCouponFieldStatus(); 
+        updateCouponFieldStatus();
+        checkFields();
     }
 
     // Function to update selected seat count
@@ -52,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear previous seat details
         seatDetailsContainer.innerHTML = '';
 
-        let totalPrice = 0; 
+        let totalPrice = 0;
 
         // Display seat details for each selected seat
         selectedSeats.forEach(seatName => {
@@ -61,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
             seatDetails.innerHTML = `<p>${seatName}</p><p>Economy</p><p>550</p>`;
             seatDetailsContainer.appendChild(seatDetails);
 
-            totalPrice += 550; 
+            totalPrice += 550;
         });
 
         // Add horizontal line if there are selected seats
@@ -71,12 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add total price element before the cart price
             const totalPriceElement = document.createElement('div');
-            totalPriceElement.className = 'flex justify-between font-inter font-bold text-lg'; 
+            totalPriceElement.className = 'flex justify-between font-inter font-bold text-lg';
             totalPriceElement.innerHTML = `
                 <p>Total Price</p>
                 <p id="totalPrice">BDT <span>${totalPrice}</span></p>
             `;
-            seatDetailsContainer.appendChild(totalPriceElement); 
+            seatDetailsContainer.appendChild(totalPriceElement);
         }
 
         seatDetailsContainer.style.display = 'block';
@@ -87,12 +92,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedSeatCount === 4) {
             couponInput.disabled = false;
             applyButton.disabled = false;
-            couponInput.style.backgroundColor = ''; 
-            couponInput.style.color = ''; 
+            couponInput.style.backgroundColor = '';
+            couponInput.style.color = '';
         } else {
             couponInput.disabled = true;
             applyButton.disabled = true;
-            couponInput.style.backgroundColor = '#f2f2f2'; 
+            couponInput.style.backgroundColor = '#f2f2f2';
             couponInput.style.color = '#666666';
         }
     }
@@ -129,21 +134,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Display discount amount
         const discountElement = document.createElement('div');
-        discountElement.className = 'font-inter font-bold text-lg text-red-500'; 
+        discountElement.className = 'font-inter font-bold text-lg text-red-500';
         discountElement.textContent = `Discount BDT  ${discount.toFixed(2)}`;
         seatDetailsContainer.appendChild(discountElement);
-        
+
         // Hide the coupon input and apply button
         const couponLabel = document.querySelector('.input.input-bordered');
         couponLabel.style.display = 'none';
     }
- 
-    
+
+    // Function to check if all required fields are filled
+    function checkFields() {
+        const passengerName = passengerNameInput.value.trim();
+        const phoneNumber = phoneNumberInput.value.trim();
+        const email = emailInput.value.trim();
+
+        const areInputsFilled = passengerName !== '' && phoneNumber !== '' && email !== '';
+        const areSeatsSelected = document.querySelectorAll('.selected').length > 0;
+
+        if (areInputsFilled && areSeatsSelected) {
+            nextButton.disabled = false;
+        } else {
+            nextButton.disabled = true;
+        }
+    }
+
     // Attach click event listeners to seat buttons
     seatButtons.forEach(function(seatButton) {
         seatButton.addEventListener('click', handleSeatSelection);
     });
 
+    // Attach change event listeners to input fields
+    passengerNameInput.addEventListener('input', checkFields);
+    phoneNumberInput.addEventListener('input', checkFields);
+    emailInput.addEventListener('input', checkFields);
+
     // Attach click event listener to apply button
     applyButton.addEventListener('click', applyCoupon);
+
+    // Add click event listener to the Next button
+    nextButton.addEventListener('click', function() {
+        // Navigate to the success-popUp.html page
+        window.location.href = 'success-popUp.html';
+    });
 });
