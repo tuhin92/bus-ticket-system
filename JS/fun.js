@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedSeatCountElement = document.getElementById('selected-seat-count');
     const seatsLeftSpan = document.getElementById('seats-left');
     const seatDetailsContainer = document.getElementById('seatDetails');
-    const cartPriceElement = document.getElementById('cart-price'); // Assuming you have an element with id 'cart-price'
+    const cartPriceElement = document.getElementById('cart-price');
+    const couponInput = document.getElementById('couponInput');
+    const applyButton = document.getElementById('applyButton');
     let selectedSeatCount = 0;
     let seatsLeft = 40;
     const selectedSeats = [];
@@ -36,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateSelectedSeatCount();
         updateSeatDetails();
+        updateCouponFieldStatus(); 
     }
 
     // Function to update selected seat count
@@ -49,16 +52,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear previous seat details
         seatDetailsContainer.innerHTML = '';
 
-        let totalPrice = 0; // Initialize total price
+        let totalPrice = 0; 
 
         // Display seat details for each selected seat
         selectedSeats.forEach(seatName => {
             const seatDetails = document.createElement('div');
-            seatDetails.className = 'flex justify-between font-inter text-sm seat-details'; // Increased font size to text-sm
+            seatDetails.className = 'flex justify-between font-inter text-sm seat-details';
             seatDetails.innerHTML = `<p>${seatName}</p><p>Economy</p><p>550</p>`;
             seatDetailsContainer.appendChild(seatDetails);
 
-            totalPrice += 550; // Add seat price to total price
+            totalPrice += 550; 
         });
 
         // Add horizontal line if there are selected seats
@@ -68,19 +71,65 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Add total price element before the cart price
             const totalPriceElement = document.createElement('div');
-            totalPriceElement.className = 'flex justify-between font-inter font-bold text-lg'; // Increased font size to text-lg
+            totalPriceElement.className = 'flex justify-between font-inter font-bold text-lg'; 
             totalPriceElement.innerHTML = `
                 <p>Total Price</p>
-                <p>BDT <span>${totalPrice}</span></p>
+                <p id="totalPrice">BDT <span>${totalPrice}</span></p>
             `;
-            seatDetailsContainer.appendChild(totalPriceElement); // Append total price element
+            seatDetailsContainer.appendChild(totalPriceElement); 
         }
 
         seatDetailsContainer.style.display = 'block';
+    }
+
+    // Function to update coupon field status
+    function updateCouponFieldStatus() {
+        if (selectedSeatCount === 4) {
+            couponInput.disabled = false;
+            applyButton.disabled = false;
+            couponInput.style.backgroundColor = ''; 
+            couponInput.style.color = ''; 
+        } else {
+            couponInput.disabled = true;
+            applyButton.disabled = true;
+            couponInput.style.backgroundColor = '#f2f2f2'; 
+            couponInput.style.color = '#666666';
+        }
+    }
+
+    // Function to apply coupon and calculate discounted price
+    function applyCoupon() {
+        const couponCode = couponInput.value.trim();
+        const totalPriceElement = document.getElementById('totalPrice');
+        const totalPriceSpan = totalPriceElement.querySelector('span');
+        const totalPrice = parseFloat(totalPriceSpan.innerText);
+
+        let discount = 0;
+
+        switch (couponCode) {
+            case "NEW15":
+                discount = totalPrice * 0.15;
+                break;
+            case "Couple 20":
+                discount = totalPrice * 0.20;
+                break;
+            default:
+                alert("Invalid coupon code");
+                return;
+        }
+
+        // Display discount amount on the same line
+        const discountElement = document.createElement('div');
+        discountElement.className = 'font-inter font-bold text-lg'; 
+        discountElement.textContent = `Discount BDT ${discount.toFixed(2)}`;
+        seatDetailsContainer.appendChild(discountElement);
     }
 
     // Attach click event listeners to seat buttons
     seatButtons.forEach(function(seatButton) {
         seatButton.addEventListener('click', handleSeatSelection);
     });
+
+    // Attach click event listener to apply button
+    applyButton.addEventListener('click', applyCoupon);
 });
