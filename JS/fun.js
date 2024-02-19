@@ -82,6 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p id="totalPrice">BDT <span>${totalPrice}</span></p>
             `;
             seatDetailsContainer.appendChild(totalPriceElement);
+
+            // Set grand total equal to total price initially
+            const grandTotalElement = document.getElementById('grandTotalValue');
+            if (grandTotalElement) {
+                grandTotalElement.textContent = totalPrice;
+            }
         }
 
         seatDetailsContainer.style.display = 'block';
@@ -109,22 +115,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalPriceSpan = totalPriceElement.querySelector('span');
         const totalPrice = parseFloat(totalPriceSpan.innerText);
 
-        let discount = 0;
+        let grandTotal = totalPrice;
 
-        switch (couponCode) {
-            case "NEW15":
-                discount = totalPrice * 0.15;
-                break;
-            case "Couple 20":
-                discount = totalPrice * 0.20;
-                break;
-            default:
-                alert("Invalid coupon code");
-                return;
+        if (couponCode === "NEW15") {
+            const discount = totalPrice * 0.15;
+            grandTotal = totalPrice - discount;
+
+            
+            // Display discount amount
+            const discountElement = document.createElement('div');
+            discountElement.className = 'font-inter font-bold text-lg text-red-500';
+            discountElement.textContent = `Discount BDT  ${discount.toFixed(2)}`;
+            seatDetailsContainer.appendChild(discountElement);
+        } else if (couponCode === "Couple 20") {
+            const discount = totalPrice * 0.20;
+            grandTotal = totalPrice - discount;
+
+            // Display discount amount
+            const discountElement = document.createElement('div');
+            discountElement.className = 'font-inter font-bold text-lg text-red-500';
+            discountElement.textContent = `Discount BDT  ${discount.toFixed(2)}`;
+            seatDetailsContainer.appendChild(discountElement);
+        } else {
+            alert("Invalid coupon code");
         }
-
-        // Calculate Grand Total
-        const grandTotal = totalPrice - discount;
 
         // Update the content of the grand total element
         const grandTotalElement = document.getElementById('grandTotalValue');
@@ -132,16 +146,11 @@ document.addEventListener('DOMContentLoaded', function() {
             grandTotalElement.textContent = grandTotal;
         }
 
-        // Display discount amount
-        const discountElement = document.createElement('div');
-        discountElement.className = 'font-inter font-bold text-lg text-red-500';
-        discountElement.textContent = `Discount BDT  ${discount.toFixed(2)}`;
-        seatDetailsContainer.appendChild(discountElement);
-
         // Hide the coupon input and apply button
         const couponLabel = document.querySelector('.input.input-bordered');
         couponLabel.style.display = 'none';
     }
+
 
     // Function to check if all required fields are filled
     function checkFields() {
@@ -159,10 +168,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     // Attach click event listeners to seat buttons
     seatButtons.forEach(function(seatButton) {
         seatButton.addEventListener('click', handleSeatSelection);
     });
+
 
     // Attach change event listeners to input fields
     passengerNameInput.addEventListener('input', checkFields);
@@ -178,3 +189,5 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = 'success-popUp.html';
     });
 });
+
+
