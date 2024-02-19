@@ -1,0 +1,9 @@
+.efct {
+    transition: transform 0.3s, box-shadow 0.3s; /* Add transition for smooth effect */
+    box-shadow: 0 0 0 transparent; /* Add transparent box shadow */
+}
+
+.efct:hover {
+    transform: translateY(-20px); /* Move the card up by 5 pixels */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
